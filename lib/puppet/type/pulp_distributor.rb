@@ -28,6 +28,9 @@ Puppet::Type.newtype(:pulp_distributor) do
   end
   newproperty(:config) do
   end
+  newproperty(:auto_publish) do
+    defaultto false
+  end
   def self.title_patterns
     PuppetX::Inuits::Pulp::Type.basic_split_title_patterns(:repo,:id)
   end

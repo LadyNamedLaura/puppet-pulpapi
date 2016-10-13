@@ -10,12 +10,13 @@ Puppet::Type.type(:pulp_distributor).provide(:apiv2, :parent => PuppetX::Inuits:
   mk_resource_methods
   def self.fieldmap
     {
-      :name    => 'id',
-      :id      => 'id',
-      :repo    => 'repo_id',
-      :type    => 'distributor_type_id',
-      :oldtype => 'distributor_type_id',
-      :config  => 'config',
+      :name         => 'id',
+      :id           => 'id',
+      :repo         => 'repo_id',
+      :type         => 'distributor_type_id',
+      :oldtype      => 'distributor_type_id',
+      :config       => 'config',
+      :auto_publish => 'auto_publish',
     }
   end
   def do_create
@@ -23,6 +24,7 @@ Puppet::Type.type(:pulp_distributor).provide(:apiv2, :parent => PuppetX::Inuits:
       :distributor_id      => @property_hash[:name],
       :distributor_type_id => @property_hash[:type],
       :distributor_config  => @property_hash[:config],
+      :auto_publish        => @property_hash[:auto_publish],
     })
   end
   def do_destroy
@@ -32,6 +34,9 @@ Puppet::Type.type(:pulp_distributor).provide(:apiv2, :parent => PuppetX::Inuits:
     if @property_hash[:type] == @property_hash[:oldtype]
       api("repositories/#{@property_hash[:repo]}/distributors/#{@property_hash[:name]}", Net::HTTP::Put, {
         :distributor_config => @property_hash[:config],
+        :delta              => {
+          :auto_publish     => @property_hash[:auto_publish],
+        },
       })
     else
       do_destroy
