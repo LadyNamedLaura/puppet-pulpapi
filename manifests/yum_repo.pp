@@ -23,15 +23,17 @@ define pulpapi::yum_repo (
     }
 
     pulp_importer{$id :
-      ensure => present,
-      type   => 'yum_importer',
-      config => delete_undef_values($importer_config),
+      ensure  => present,
+      type    => 'yum_importer',
+      config  => delete_undef_values($importer_config),
+      require => Pulp_repo[$id],
     }
 
     if $sync_schedule {
       pulp_sync_schedule{$id :
-        ensure => present,
-        sched  => $sync_schedule,
+        ensure  => present,
+        sched   => $sync_schedule,
+        require => Pulp_importer[$id],
       }
     }
   }
@@ -50,5 +52,6 @@ define pulpapi::yum_repo (
       generate_sqlite => true,
 #      repoview => $repoview,
     },
+    require      => Pulp_repo[$id],
   }
 }
