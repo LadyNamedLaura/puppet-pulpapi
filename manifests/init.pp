@@ -1,9 +1,18 @@
 class pulpapi(
+  $apiuser         = 'admin',
+  $apipass         = 'admin',
+  $httpurl         = "http://${fqdn}/pulp/repos/",
+  $apiurl          = "https://${fqdn}/pulp/api/v2/",
   $purge_repos     = false, # set this to true in hiera, we don't want to nuke pulp if we lose hiera
   $yum_repos       = {},
   $mirrors         = {}, # { relpath => source }
   $mirror_schedule = "P1DT", # daily
 ){
+
+  file {$::pulp_apiconfig_path:
+    ensure  => file,
+    content => template('profile_pulp/pulpapi.conf.erb'),
+  }
 
   resources {[
     'pulp_repo',

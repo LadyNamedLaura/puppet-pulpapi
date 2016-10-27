@@ -11,19 +11,27 @@ module PuppetX
 end
 class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
   @@apicache = {}
+  @@apiconfig = false
+  def self.getapiconfig
+    conffile = File.join(Puppet.settings[:vardir],"pulpapi.json")
+    @@apiconfig = JSON.parse(File.read(conffile))
+  end
+
   def api(endpoint, method=Net::HTTP::Get, data=nil)
     self.class.api(endpoint, method, data)
   end
   def self.api(endpoint, method=Net::HTTP::Get, data=nil)
+    config = getapiconfig
+    uri = URI.parse(config["apiurl"])
 
-    http= Net::HTTP.new("localhost",443)
-    http.use_ssl=true
+    http= Net::HTTP.new(uri.host,uri.port)
+    http.use_ssl=true if uri.scheme == "https"
     http.verify_mode=OpenSSL::SSL::VERIFY_NONE
 
     if (method == Net::HTTP::Get && @@apicache.has_key?(endpoint))
       return @@apicache[endpoint]
     end
-    request = method.new("/pulp/api/v2/#{endpoint}/",'Content-Type' => 'application/json')
+    request = method.new("#{uri.path}/#{endpoint}/",'Content-Type' => 'application/json')
     request.basic_auth("admin","admin")
     if data
       request.body = JSON.generate(data)
