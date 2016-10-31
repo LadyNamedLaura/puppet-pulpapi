@@ -36,6 +36,13 @@ define pulpapi::yum_repo (
         require => Pulp_importer[$id],
       }
     }
+  } else {
+    pulp_importer{$id :
+      ensure  => present,
+      type    => 'yum_importer',
+      config  => {},
+      require => Pulp_repo[$id],
+    }
   }
 
   pulp_distributor{"${id}__yum_distributor":
