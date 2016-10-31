@@ -13,8 +13,11 @@ class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
   @@apicache = {}
   @@apiconfig = false
   def self.getapiconfig
-    conffile = File.join(Puppet.settings[:vardir],"pulpapi.json")
-    @@apiconfig = JSON.parse(File.read(conffile))
+    unless @@apiconfig
+      conffile = File.join(Puppet.settings[:vardir],"pulpapi.json")
+      @@apiconfig = JSON.parse(File.read(conffile))
+    end
+    @@apiconfig
   end
 
   def api(endpoint, method=Net::HTTP::Get, data=nil)
@@ -32,7 +35,7 @@ class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
       return @@apicache[endpoint]
     end
     request = method.new("#{uri.path}/#{endpoint}/",'Content-Type' => 'application/json')
-    request.basic_auth("admin","admin")
+    request.basic_auth(config["apiuser"],config["apipass"])
     if data
       request.body = JSON.generate(data)
     end
