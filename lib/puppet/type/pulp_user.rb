@@ -22,7 +22,7 @@ Puppet::Type.newtype(:pulp_user) do
         http=Net::HTTP.new(uri.host,uri.port)
         http.use_ssl=true if uri.scheme == "https"
         http.verify_mode=OpenSSL::SSL::VERIFY_NONE
-        request = Net::HTTP::Get.new("#{uri.path}/users/#{self.resource[:name]}/",'Content-Type' => 'application/json')
+        request = Net::HTTP::Post.new("#{uri.path}/actions/login/",'Content-Type' => 'application/json')
         request.basic_auth(self.resource[:name],should)
         response = http.request(request)
         return response.code.to_i == 200

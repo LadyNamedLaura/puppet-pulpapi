@@ -35,16 +35,20 @@ Puppet::Type.type(:pulp_permission).provide(:apiv2, :parent => PuppetX::Inuits::
 
   def self.rawinstances
     api('permissions').map do |perm|
-      perm['users'].map do |uname, operations|
-        if uname == PuppetX::Inuits::Pulp::PulpAPIv2.getapiconfig['apiuser']
-          []
-        else
-          {
-            :path          => perm['resource'],
-            :user          => uname,
-            :operations    => operations,
-            :oldoperations => operations,
-          }
+      if ['/v2/actions/login/','/v2/actions/logout/'].include? perm['resource']
+        []
+      else
+        perm['users'].map do |uname, operations|
+          if uname == PuppetX::Inuits::Pulp::PulpAPIv2.getapiconfig['apiuser']
+            []
+          else
+            {
+              :path          => perm['resource'],
+              :user          => uname,
+              :operations    => operations,
+              :oldoperations => operations,
+            }
+          end
         end
       end
     end
