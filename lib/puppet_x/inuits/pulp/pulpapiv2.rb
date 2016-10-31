@@ -59,6 +59,10 @@ class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
     end
     @property_hash.clear
   end
+  def do_update
+    do_destroy
+    do_create
+  end
 
   def exists?
     !(@property_hash[:ensure] == :absent || @property_hash.empty?)

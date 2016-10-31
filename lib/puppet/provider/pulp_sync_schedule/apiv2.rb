@@ -27,10 +27,6 @@ Puppet::Type.type(:pulp_sync_schedule).provide(:apiv2, :parent => PuppetX::Inuit
 #      :failure_threshold => @property_hash[:failure_threshold],
     })
   end
-  def do_update
-    do_destroy
-    do_create
-  end
   def do_destroy
     api("repositories/#{@property_hash[:repo]}/importers/#{@property_hash[:importer]}/schedules/sync/#{@property_hash[:id]}", Net::HTTP::Delete)
   end
