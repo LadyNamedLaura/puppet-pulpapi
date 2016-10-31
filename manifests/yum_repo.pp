@@ -17,7 +17,7 @@ define pulpapi::yum_repo (
   }
   if $upstream {
     $importer_config = {
-      feed             => $upstream,
+      feed             => regsubst($upstream,'^/',$::pulpapi::httpurl),
       retain_old_count => $retain_old_count,
       remove_missing   => $remove_missing,
     }
