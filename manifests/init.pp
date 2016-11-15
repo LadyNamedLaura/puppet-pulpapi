@@ -7,6 +7,7 @@ class pulpapi(
   $yum_repos       = {},
   $mirrors         = {}, # { relpath => source }
   $mirror_schedule = "P1DT", # daily
+  $users           = {},
 ){
 
   file {$::pulp_apiconfig_path:
@@ -29,4 +30,5 @@ class pulpapi(
   pulpapi::yum_mirror_wrapper{$mirror_relpaths:
     mirrorhash => $mirrors,
   }
+  create_resources('pulp_user', $users)
 }
