@@ -1,13 +1,14 @@
 # == Define: pulpapi::yum_repo
 #
 define pulpapi::yum_repo (
-  $id               = $title,
-  $relative_url     = "$title",
-  $upstream         = undef,
-  $sync_schedule    = undef,
-  $repoview         = false,
-  $remove_missing   = false,
-  $retain_old_count = undef,
+  $id                = $title,
+  $relative_url      = "$title",
+  $upstream          = undef,
+  $sync_schedule     = undef,
+  $repoview          = false,
+  $remove_missing    = false,
+  $retain_old_count  = undef,
+  $allow_upload_from = [],
 ) {
   pulp_repo{$id :
     ensure => 'present',
@@ -43,6 +44,10 @@ define pulpapi::yum_repo (
       config  => {},
       require => Pulp_repo[$id],
     }
+  }
+  if ! empty($allow_upload_from) {
+    $uploadperms = suffix($allow_upload_from, "::${id}")
+    ::pulpapi::permission::repo_upload{$uploadperms:}
   }
 
   pulp_distributor{"${id}__yum_distributor":
