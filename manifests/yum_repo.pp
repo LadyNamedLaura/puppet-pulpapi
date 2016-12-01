@@ -13,7 +13,8 @@ define pulpapi::yum_repo (
   pulp_repo{$id :
     ensure => 'present',
     notes  => {
-      managed_by => 'puppet',
+      managed_by   => 'puppet',
+      '_repo-type' => 'rpm-repo',
     }
   }
   if $upstream {
