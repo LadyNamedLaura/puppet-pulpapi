@@ -68,6 +68,16 @@ class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
     !(@property_hash[:ensure] == :absent || @property_hash.empty?)
   end
 
+  def config_unset(newcfg,oldcfg)
+    Hash[oldcfg.map{|k,v| [k,nil] } ].merge(newcfg) do |k,o,n|
+      if n.is_a?(Hash)
+        config_unset(n,oldcfg[k])
+      else
+        n
+      end
+    end
+  end
+
   def flush
     return if @property_hash.empty?
     if @property_hash[:exists]

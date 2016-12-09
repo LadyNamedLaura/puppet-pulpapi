@@ -16,6 +16,7 @@ Puppet::Type.type(:pulp_distributor).provide(:apiv2, :parent => PuppetX::Inuits:
       :type         => 'distributor_type_id',
       :oldtype      => 'distributor_type_id',
       :config       => 'config',
+      :oldconfig    => 'config',
       :auto_publish => 'auto_publish',
     }
   end
@@ -33,7 +34,7 @@ Puppet::Type.type(:pulp_distributor).provide(:apiv2, :parent => PuppetX::Inuits:
   def do_update
     if @property_hash[:type] == @property_hash[:oldtype]
       api("repositories/#{@property_hash[:repo]}/distributors/#{@property_hash[:name]}", Net::HTTP::Put, {
-        :distributor_config => @property_hash[:config],
+        :distributor_config => config_unset(@property_hash[:config],@property_hash[:oldconfig]),
         :delta              => {
           :auto_publish     => @property_hash[:auto_publish],
         },

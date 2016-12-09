@@ -19,9 +19,6 @@ Puppet::Type.type(:pulp_importer).provide(:apiv2, :parent => PuppetX::Inuits::Pu
       :oldconfig => 'config',
     }
   end
-  def config_unset(newcfg,oldcfg)
-    Hash[oldcfg.map{|k,v| [k,nil] } ].merge(newcfg)
-  end
   def do_create
     api("repositories/#{@property_hash[:repo]}/importers", Net::HTTP::Post, {
       :importer_type_id => @property_hash[:type],
