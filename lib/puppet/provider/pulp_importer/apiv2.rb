@@ -10,13 +10,17 @@ Puppet::Type.type(:pulp_importer).provide(:apiv2, :parent => PuppetX::Inuits::Pu
   mk_resource_methods
   def self.fieldmap
     {
-      :id      => 'id',
-      :repo    => 'repo_id',
-      :name    => 'repo_id',
-      :type    => 'importer_type_id',
-      :oldtype => 'importer_type_id',
-      :config  => 'config',
+      :id        => 'id',
+      :repo      => 'repo_id',
+      :name      => 'repo_id',
+      :type      => 'importer_type_id',
+      :oldtype   => 'importer_type_id',
+      :config    => 'config',
+      :oldconfig => 'config',
     }
+  end
+  def config_unset(newcfg,oldcfg)
+    Hash[oldcfg.map{|k,v| [k,nil] } ].merge(newcfg)
   end
   def do_create
     api("repositories/#{@property_hash[:repo]}/importers", Net::HTTP::Post, {
@@ -27,9 +31,10 @@ Puppet::Type.type(:pulp_importer).provide(:apiv2, :parent => PuppetX::Inuits::Pu
   def do_update
     if @property_hash[:type] == @property_hash[:oldtype]
       api("repositories/#{@property_hash[:repo]}/importers/#{@property_hash[:id]}", Net::HTTP::Put, {
-        :importer_config => @property_hash[:config],
+        :importer_config => config_unset(@property_hash[:config], @property_hash[:oldconfig]),
       })
     else
+      do_destroy
       do_create
     end
   end
