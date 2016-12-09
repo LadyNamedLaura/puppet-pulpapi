@@ -33,6 +33,11 @@ class pulpapi(
 
   create_resources('::pulpapi::yum_repo', $yum_repos);
 
+  ::profile_pulp::yum_repo{"__empty__":
+    ensure       => present,
+    relative_url => '.empty',
+  }
+
   $mirror_relpaths = keys($mirrors)
   pulpapi::yum_mirror_wrapper{$mirror_relpaths:
     mirrorhash => $mirrors,
