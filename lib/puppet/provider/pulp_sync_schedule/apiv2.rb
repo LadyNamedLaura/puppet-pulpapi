@@ -16,8 +16,8 @@ Puppet::Type.type(:pulp_sync_schedule).provide(:apiv2, :parent => PuppetX::Inuit
       :importer        => 'importerid',
       :enabled         => 'enabled',
       :name            => 'repo_id',
-      :override_config => 'override_config'
-      :oldconfig       => 'override_config'
+      :override_config => 'override_config',
+      :oldconfig       => 'override_config',
     }
   end
   def do_create
