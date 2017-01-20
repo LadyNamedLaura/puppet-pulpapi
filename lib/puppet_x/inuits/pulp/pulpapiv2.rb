@@ -69,19 +69,15 @@ class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
   end
 
   def config_unset(newcfg,oldcfg)
-    empty = true
-    h = Hash[oldcfg.map{|k,v| [k,nil] } ].merge(newcfg) do |k,o,n|
-      empty = false
+    unless oldcfg
+      return newcfg
+    end
+    Hash[oldcfg.map{|k,v| [k,nil] } ].merge(newcfg) do |k,o,n|
       if n.is_a?(Hash)
         config_unset(n,oldcfg[k])
       else
         n
       end
-    end
-    if empty
-      return nil
-    else
-      return h
     end
   end
 
