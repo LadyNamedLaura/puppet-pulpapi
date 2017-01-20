@@ -26,7 +26,9 @@ Puppet::Type.newtype(:pulp_sync_schedule) do
   newproperty(:enabled) do
     defaultto true
   end
-
+  newproperty(:override_config) do
+    defaultto {}
+  end
   def self.title_patterns
     PuppetX::Inuits::Pulp::Type.basic_split_title_patterns(:repo,:sched)
   end

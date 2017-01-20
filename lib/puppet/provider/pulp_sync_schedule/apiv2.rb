@@ -10,12 +10,14 @@ Puppet::Type.type(:pulp_sync_schedule).provide(:apiv2, :parent => PuppetX::Inuit
   mk_resource_methods
   def self.fieldmap
     {
-      :id       => '_id',
-      :repo     => 'repo_id',
-      :sched    => 'schedule',
-      :importer => 'importerid',
-      :enabled  => 'enabled',
-      :name     => 'repo_id',
+      :id              => '_id',
+      :repo            => 'repo_id',
+      :sched           => 'schedule',
+      :importer        => 'importerid',
+      :enabled         => 'enabled',
+      :name            => 'repo_id',
+      :override_config => 'override_config'
+      :oldconfig       => 'override_config'
     }
   end
   def do_create
@@ -23,8 +25,7 @@ Puppet::Type.type(:pulp_sync_schedule).provide(:apiv2, :parent => PuppetX::Inuit
     api("repositories/#{@property_hash[:repo]}/importers/#{@property_hash[:importer]}/schedules/sync", Net::HTTP::Post, {
       :schedule => @property_hash[:sched],
       :enabled  => @property_hash[:enabled],
-#      :override_config => @property_hash[:override_config],
-#      :failure_threshold => @property_hash[:failure_threshold],
+      :override_config => config_unset(@property_hash[:override_config], @property_hash[:oldconfig]),
     })
   end
   def do_destroy

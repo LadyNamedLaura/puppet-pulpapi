@@ -4,7 +4,7 @@ define pulpapi::yum_repo (
   $id                = $title,
   $ensure            = present,
   $relative_url      = "$title",
-  $upstream          = '/.empty',
+  $upstream          = false,
   $sync_schedule     = undef,
   $repoview          = false,
   $remove_missing    = false,
@@ -22,7 +22,7 @@ define pulpapi::yum_repo (
   if $ensure == present {
     $importer_config = {
       feed             => $upstream ? {
-        false   => undef,
+        false   => '/.empty',
         default => regsubst($upstream,'^/',$::pulpapi::httpurl),
       },
       retain_old_count => $retain_old_count,
@@ -38,9 +38,13 @@ define pulpapi::yum_repo (
 
     if $sync_schedule {
       pulp_sync_schedule{$id :
-        ensure  => present,
-        sched   => $sync_schedule,
-        require => Pulp_importer[$id],
+        ensure          => present,
+        sched           => $sync_schedule,
+        require         => Pulp_importer[$id],
+        override_config => $upstream ? {
+          false   => {force_full => true},
+          default => undef,
+        }
       }
     }
 
