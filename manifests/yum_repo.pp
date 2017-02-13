@@ -22,7 +22,7 @@ define pulpapi::yum_repo (
   if $ensure == present {
     $importer_config = {
       feed             => $upstream ? {
-        false   => '/.empty',
+        false   => "${::pulpapi::httpurl}/.empty",
         default => regsubst($upstream,'^/',$::pulpapi::httpurl),
       },
       retain_old_count => $retain_old_count,
