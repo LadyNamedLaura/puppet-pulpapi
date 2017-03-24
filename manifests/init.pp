@@ -13,7 +13,7 @@ class pulpapi(
 
   file {$::pulp_apiconfig_path:
     ensure  => file,
-    content => template('profile_pulp/pulpapi.conf.erb'),
+    content => template('pulpapi/pulpapi.conf.erb'),
   }
 
   resources {[
