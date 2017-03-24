@@ -15,7 +15,7 @@ Puppet::Type.type(:pulp_sync_schedule).provide(:apiv2, :parent => PuppetX::Inuit
       :sched           => 'schedule',
       :importer        => 'importerid',
       :enabled         => 'enabled',
-      :name            => 'repo_id',
+      :name            => 'name',
       :override_config => 'override_config',
       :oldconfig       => 'override_config',
     }
@@ -39,6 +39,7 @@ Puppet::Type.type(:pulp_sync_schedule).provide(:apiv2, :parent => PuppetX::Inuit
           sync['repo_id'] = repo['id']
           sync['importerid'] = importer['id']
           sync['name'] = "#{sync['repo_id']}::#{sync['schedule']}"
+          sync['override_config'] = sync['kwargs']['overrides']
           sync
         end
       end
