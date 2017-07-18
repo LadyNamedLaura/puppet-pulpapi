@@ -13,11 +13,17 @@ Puppet::Type.newtype(:pulp_repo) do
   end
 
   newparam(:name) do
+    desc "Name of the repository"
   end
+
   newproperty(:display_name) do
+    desc "User-readable display name. May contain i18n characters."
   end
+
   newproperty(:description) do
+    desc "User-readable description. May contain i18n characters."
   end
+
   newproperty(:notes) do
   end
 end
