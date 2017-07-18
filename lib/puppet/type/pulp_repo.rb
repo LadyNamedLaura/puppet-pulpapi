@@ -1,6 +1,6 @@
 begin
   require 'puppet_x/inuits/pulp/type'
-rescue LoadError => detail
+rescue LoadError
   require 'pathname'
   module_base = Pathname.new(__FILE__).dirname
   require module_base + '../../' + 'puppet_x/inuits/pulp/type'
