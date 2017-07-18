@@ -16,10 +16,10 @@ define pulpapi::permission::repo_upload (
     $_repoid = $repoid
   }
   pulp_permission{"${_user}::upload_${_repoid}":
-    user => $_user,
-    path => "/v2/repositories/${_repoid}/",
+    user       => $_user,
+    path       => "/v2/repositories/${_repoid}/",
     operations => ['READ','UPDATE','CREATE','EXECUTE'],
-    require => Pulp_user[$_user],
+    require    => Pulp_user[$_user],
   }
   ensure_resource('pulpapi::permission::upload',$_user)
 }

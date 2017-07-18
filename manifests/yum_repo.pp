@@ -3,7 +3,7 @@
 define pulpapi::yum_repo (
   $id                = $title,
   $ensure            = present,
-  $relative_url      = "$title",
+  $relative_url      = $title,
   $upstream          = false,
   $sync_schedule     = undef,
   $repoview          = false,
@@ -16,7 +16,7 @@ define pulpapi::yum_repo (
     notes  => {
       managed_by   => 'puppet',
       '_repo-type' => 'rpm-repo',
-    }
+    },
   }
 
   if $ensure == present {
@@ -37,14 +37,15 @@ define pulpapi::yum_repo (
     }
 
     if $sync_schedule {
+      $override_config = $upstream ? {
+        false   => {'force_full' => true},
+        default => undef,
+      }
       pulp_sync_schedule{$id :
         ensure          => present,
         sched           => $sync_schedule,
+        override_config => $override_config,
         require         => Pulp_importer[$id],
-        override_config => $upstream ? {
-          false   => {force_full => true},
-          default => undef,
-        }
       }
     }
 
@@ -60,12 +61,12 @@ define pulpapi::yum_repo (
       repo         => $id,
       auto_publish => ($upstream and $sync_schedule),
       config       => {
-        checksum_type   => "sha256",
+        checksum_type   => 'sha256',
         http            => true,
         https           => false,
         relative_url    => $relative_url,
         generate_sqlite => true,
-  #      repoview => $repoview,
+        #repoview => $repoview,
       },
       require      => Pulp_repo[$id],
     }
