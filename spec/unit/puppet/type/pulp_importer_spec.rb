@@ -8,4 +8,10 @@ describe Puppet::Type.type(:pulp_importer) do
   end
 
   it_behaves_like 'an ensurable type'
+
+  describe 'autorequiring' do
+    repo = Puppet::Type.type(:pulp_repo).new(:name => 'repo')
+    resource = described_class.new(:name => 'test', :repo => 'repo')
+    it_behaves_like 'an autorequiring resource', resource, repo
+  end
 end

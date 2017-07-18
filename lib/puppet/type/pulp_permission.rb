@@ -38,4 +38,7 @@ Puppet::Type.newtype(:pulp_permission) do
   def self.title_patterns
     PuppetX::Inuits::Pulp::Type.basic_split_title_patterns(:user,:path)
   end
+  autorequire(:pulp_user) do
+    [self[:user]]
+  end
 end
