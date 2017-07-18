@@ -5,7 +5,7 @@ define pulpapi::yum_mirror (
   $relative_url = $title,
 ) {
   $id = regsubst(regsubst($title, '\W', '_', 'G'), '_$','')
-  pulpapi::yum_repo{"${id}":
+  pulpapi::yum_repo{$id:
     relative_url     => "pub/${relative_url}",
     upstream         => $upstream,
     sync_schedule    => $::pulpapi::mirror_schedule,
