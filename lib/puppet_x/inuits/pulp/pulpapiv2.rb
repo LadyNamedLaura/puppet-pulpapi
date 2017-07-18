@@ -11,6 +11,7 @@ module PuppetX
 end
 class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
   @@apicache = {}
+
   @@apiconfig = false
   def self.getapiconfig
     unless @@apiconfig
@@ -23,6 +24,7 @@ class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
   def api(endpoint, method=Net::HTTP::Get, data=nil)
     self.class.api(endpoint, method, data)
   end
+
   def self.api(endpoint, method=Net::HTTP::Get, data=nil)
     config = getapiconfig
     uri = URI.parse(config["apiurl"])
@@ -49,16 +51,19 @@ class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
     @@apicache[endpoint] = res if method == Net::HTTP::Get
     res
   end
+
   def create
     @property_hash = Hash[@resource]
     @property_hash[:exists] = false
   end
+
   def destroy
     if @property_hash[:exists]
       do_destroy
     end
     @property_hash.clear
   end
+
   def do_update
     do_destroy
     do_create
