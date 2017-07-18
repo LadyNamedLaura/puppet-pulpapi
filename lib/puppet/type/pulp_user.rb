@@ -9,7 +9,10 @@ rescue LoadError
 end
 
 Puppet::Type.newtype(:pulp_user) do
-  ensurable
+  ensurable do
+    newvalues :present, :absent
+    defaultto :present
+  end
 
   newparam(:name) do
     isnamevar

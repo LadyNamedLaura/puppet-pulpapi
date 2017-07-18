@@ -7,7 +7,10 @@ rescue LoadError
 end
 
 Puppet::Type.newtype(:pulp_distributor) do
-  ensurable
+  ensurable do
+    newvalues :present, :absent
+    defaultto :present
+  end
 
   newparam(:repo) do
     isnamevar
