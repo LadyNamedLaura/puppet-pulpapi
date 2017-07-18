@@ -8,4 +8,10 @@ describe Puppet::Type.type(:pulp_permission) do
   end
 
   it_behaves_like 'an ensurable type'
+
+  describe 'autorequiring' do
+    user = Puppet::Type.type(:pulp_user).new(:name => 'user')
+    resource = described_class.new(:name => 'test', :user => 'user')
+    it_behaves_like 'an autorequiring resource', resource, user
+  end
 end

@@ -30,6 +30,6 @@ Puppet::Type.newtype(:pulp_importer) do
     PuppetX::Inuits::Pulp::Type.basic_split_title_patterns(:repo,:type)
   end
   autorequire(:pulp_repo) do
-    [@parameters[:repo]]
+    [self[:repo]]
   end
 end

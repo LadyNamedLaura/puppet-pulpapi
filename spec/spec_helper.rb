@@ -26,3 +26,19 @@ shared_examples 'a parameter' do |param|
     end
   end
 end
+
+shared_examples 'an autorequiring resource' do |resource, requirement|
+  it do
+    catalog = Puppet::Resource::Catalog.new
+    catalog.add_resource resource
+
+    expect(resource.autorequire.size).to eq(0)
+
+    catalog.add_resource requirement
+
+    req = resource.autorequire
+    expect(req.size).to eq(1)
+    expect(req[0].target).to eq(resource)
+    expect(req[0].source).to eq(requirement)
+  end
+end
