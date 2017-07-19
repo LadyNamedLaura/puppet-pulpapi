@@ -31,7 +31,7 @@ Puppet::Type.newtype(:pulp_distributor) do
   end
   newproperty(:config) do
   end
-  newproperty(:auto_publish) do
+  newproperty(:auto_publish, :parent => Puppet::Property::Boolean) do
     defaultto false
   end
   def self.title_patterns

@@ -42,3 +42,17 @@ shared_examples 'an autorequiring resource' do |resource, requirement|
     expect(req[0].source).to eq(requirement)
   end
 end
+
+shared_examples 'a boolean parameter' do |param|
+  describe param do
+    [true, false, 'true', 'false'].each do |value|
+      it "accepts #{value} as a value" do
+        expect { described_class.new(name: 'test', param => value) }.not_to raise_error
+      end
+    end
+
+    it 'rejects other values' do
+      expect { described_class.new(name: 'test', param => 'foo') }.to raise_error(Puppet::Error)
+    end
+  end
+end

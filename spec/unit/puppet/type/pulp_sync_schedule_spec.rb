@@ -9,6 +9,8 @@ describe Puppet::Type.type(:pulp_sync_schedule) do
 
   it_behaves_like 'an ensurable type'
 
+  it_behaves_like 'a boolean parameter', 'enabled'
+
   [:pulp_repo, :pulp_importer].each do |type|
     describe "autorequire #{type}" do
       requirement = Puppet::Type.type(type).new(:name => 'bunnies')

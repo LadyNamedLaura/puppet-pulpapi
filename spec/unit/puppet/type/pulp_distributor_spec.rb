@@ -9,6 +9,8 @@ describe Puppet::Type.type(:pulp_distributor) do
 
   it_behaves_like 'an ensurable type'
 
+  it_behaves_like 'a boolean parameter', 'auto_publish'
+
   describe 'autorequiring' do
     repo = Puppet::Type.type(:pulp_repo).new(:name => 'repo')
     resource = described_class.new(:name => 'test', :repo => 'repo')

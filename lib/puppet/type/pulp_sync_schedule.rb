@@ -26,7 +26,7 @@ Puppet::Type.newtype(:pulp_sync_schedule) do
       self.resource[:repo]
     end
   end
-  newproperty(:enabled) do
+  newproperty(:enabled, :parent => Puppet::Property::Boolean) do
     defaultto true
   end
   newproperty(:override_config) do
