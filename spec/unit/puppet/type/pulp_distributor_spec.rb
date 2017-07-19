@@ -9,6 +9,10 @@ describe Puppet::Type.type(:pulp_distributor) do
 
   it_behaves_like 'an ensurable type'
 
+  ['repo', 'id', 'type', 'config'].each do |param|
+    it_behaves_like 'a parameter', param
+  end
+
   it_behaves_like 'a boolean parameter', 'auto_publish'
 
   describe 'autorequiring' do
