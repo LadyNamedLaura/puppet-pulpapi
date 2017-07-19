@@ -1,7 +1,11 @@
-require "openssl"
 require "net/http"
-require "uri"
-require 'json'
+begin
+  require 'puppet_x/inuits/pulp/apiv2'
+rescue LoadError
+  require 'pathname'
+  module_base = Pathname.new(__FILE__).dirname
+  require module_base + 'apiv2'
+end
 
 module PuppetX
   module Inuits
@@ -25,46 +29,20 @@ class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
 
   @@apicache = {}
 
-  def self.configpath
-    File.join(Puppet.settings[:vardir], 'pulpapi.json')
-  end
-
-  @@apiconfig = false
-  def self.getapiconfig
-    unless @@apiconfig
-      @@apiconfig = JSON.parse(File.read(configpath))
-    end
-    @@apiconfig
-  end
-
   def api(endpoint, method=Net::HTTP::Get, data=nil)
     self.class.api(endpoint, method, data)
   end
 
   def self.api(endpoint, method=Net::HTTP::Get, data=nil)
-    config = getapiconfig
-    uri = URI.parse(config["apiurl"])
+    use_cache = method == Net::HTTP::Get
 
-    http= Net::HTTP.new(uri.host,uri.port)
-    http.use_ssl=true if uri.scheme == "https"
-    http.verify_mode=OpenSSL::SSL::VERIFY_NONE
-
-    if (method == Net::HTTP::Get && @@apicache.has_key?(endpoint))
+    if (use_cache && @@apicache.has_key?(endpoint))
       return @@apicache[endpoint]
     end
-    request = method.new("#{uri.path}/#{endpoint}/",'Content-Type' => 'application/json')
-    request.basic_auth(config["apiuser"],config["apipass"])
-    if data
-      request.body = JSON.generate(data)
-    end
-    response = http.request(request)
-    if response.body == 'null'
-      res = nil
-    else
-      res = JSON.parse(response.body)
-    end
-    raise(Puppet::Error, "#{response.to_s}\n#{JSON.pretty_generate(res)}") if response.code.to_i >= 400
-    @@apicache[endpoint] = res if method == Net::HTTP::Get
+
+    client = PuppetX::Inuits::Pulp::APIv2.instance
+    res = client.request(endpoint, method, data)
+    @@apicache[endpoint] = res if use_cache
     res
   end
 

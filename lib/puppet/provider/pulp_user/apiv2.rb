@@ -47,6 +47,6 @@ Puppet::Type.type(:pulp_user).provide(:apiv2, :parent => PuppetX::Inuits::Pulp::
   end
 
   def self.ignored_user
-    PuppetX::Inuits::Pulp::PulpAPIv2.getapiconfig['apiuser']
+    PuppetX::Inuits::Pulp::APIv2.instance.username
   end
 end
