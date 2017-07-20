@@ -39,12 +39,14 @@ Puppet::Type.type(:pulp_user).provide(:apiv2, :parent => PuppetX::Inuits::Pulp::
 
   def self.rawinstances
     api('users').map do |u|
-      u["password"] = "****"
-      if u['login'] == PuppetX::Inuits::Pulp::PulpAPIv2.getapiconfig['apiuser']
-        []
-      else
+      if u['login'] != ignored_user
+        u["password"] = "****"
         u
       end
-    end
+    end.compact
+  end
+
+  def self.ignored_user
+    PuppetX::Inuits::Pulp::PulpAPIv2.getapiconfig['apiuser']
   end
 end

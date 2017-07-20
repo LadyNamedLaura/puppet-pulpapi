@@ -38,6 +38,7 @@ Puppet::Type.type(:pulp_sync_schedule).provide(:apiv2, :parent => PuppetX::Inuit
   end
 
   def self.rawinstances
+    # TODO: add parameter to include the importers inline?
     api('repositories').map do |repo|
       api("repositories/#{repo['id']}/importers").map do |importer|
         api("repositories/#{repo['id']}/importers/#{importer['id']}/schedules/sync").map do |sync|
@@ -48,6 +49,6 @@ Puppet::Type.type(:pulp_sync_schedule).provide(:apiv2, :parent => PuppetX::Inuit
           sync
         end
       end
-    end
+    end.flatten
   end
 end
