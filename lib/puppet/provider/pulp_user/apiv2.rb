@@ -15,21 +15,26 @@ Puppet::Type.type(:pulp_user).provide(:apiv2, :parent => PuppetX::Inuits::Pulp::
     }
   end
 
-  def do_destroy
-    api("users/#{@property_hash[:name]}", Net::HTTP::Delete)
-  end
   def do_create
-    api('users', Net::HTTP::Post, {
+    api(collection_url, Net::HTTP::Post, {
       :login    => @property_hash[:name],
       :password => @property_hash[:password],
     })
   end
   def do_update
-    api("users/#{@property_hash[:name]}", Net::HTTP::Put, {
+    api(resource_url, Net::HTTP::Put, {
       :delta => {
         :password => @property_hash[:password],
       }
     })
+  end
+
+  def collection_url
+    'users'
+  end
+
+  def resource_url
+    "users/#{@property_hash[:name]}"
   end
 
   def self.rawinstances

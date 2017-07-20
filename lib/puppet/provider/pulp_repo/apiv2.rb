@@ -17,11 +17,8 @@ Puppet::Type.type(:pulp_repo).provide(:apiv2, :parent => PuppetX::Inuits::Pulp::
     }
   end
 
-  def do_destroy
-    api("repositories/#{@property_hash[:name]}", Net::HTTP::Delete)
-  end
   def do_create
-    api('repositories', Net::HTTP::Post, {
+    api(collection_url, Net::HTTP::Post, {
       :id           => @property_hash[:name],
       :display_name => @property_hash[:display_name],
       :description  => @property_hash[:description],
@@ -29,13 +26,21 @@ Puppet::Type.type(:pulp_repo).provide(:apiv2, :parent => PuppetX::Inuits::Pulp::
     })
   end
   def do_update
-    api("repositories/#{@property_hash[:name]}", Net::HTTP::Put, {
+    api(resource_url, Net::HTTP::Put, {
       :delta => {
         :display_name => @property_hash[:display_name],
         :description  => @property_hash[:description],
         :notes        => @property_hash[:notes],
       }
     })
+  end
+
+  def collection_url
+    'repositories'
+  end
+
+  def resource_url
+    "repositories/#{@property_hash[:name]}"
   end
 
   def self.rawinstances

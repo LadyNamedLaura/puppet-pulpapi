@@ -21,19 +21,16 @@ Puppet::Type.type(:pulp_distributor).provide(:apiv2, :parent => PuppetX::Inuits:
     }
   end
   def do_create
-    api("repositories/#{@property_hash[:repo]}/distributors", Net::HTTP::Post, {
+    api(collection_url, Net::HTTP::Post, {
       :distributor_id      => @property_hash[:name],
       :distributor_type_id => @property_hash[:type],
       :distributor_config  => @property_hash[:config],
       :auto_publish        => @property_hash[:auto_publish],
     })
   end
-  def do_destroy
-    api("repositories/#{@property_hash[:repo]}/distributors/#{@property_hash[:name]}", Net::HTTP::Delete)
-  end
   def do_update
     if @property_hash[:type] == @property_hash[:oldtype]
-      api("repositories/#{@property_hash[:repo]}/distributors/#{@property_hash[:name]}", Net::HTTP::Put, {
+      api(resource_url, Net::HTTP::Put, {
         :distributor_config => config_unset(@property_hash[:config],@property_hash[:oldconfig]),
         :delta              => {
           :auto_publish     => @property_hash[:auto_publish],
@@ -43,6 +40,14 @@ Puppet::Type.type(:pulp_distributor).provide(:apiv2, :parent => PuppetX::Inuits:
       do_destroy
       do_create
     end
+  end
+
+  def collection_url
+    "repositories/#{@property_hash[:repo]}/distributors"
+  end
+
+  def resource_url
+    "repositories/#{@property_hash[:repo]}/distributors/#{@property_hash[:name]}"
   end
 
   def self.rawinstances

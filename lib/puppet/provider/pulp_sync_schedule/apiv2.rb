@@ -22,14 +22,19 @@ Puppet::Type.type(:pulp_sync_schedule).provide(:apiv2, :parent => PuppetX::Inuit
   end
   def do_create
     @property_hash[:importer] = api("repositories/#{@property_hash[:repo]}/importers")[0]['id']
-    api("repositories/#{@property_hash[:repo]}/importers/#{@property_hash[:importer]}/schedules/sync", Net::HTTP::Post, {
+    api(collection_url, Net::HTTP::Post, {
       :schedule => @property_hash[:sched],
       :enabled  => @property_hash[:enabled],
       :override_config => config_unset(@property_hash[:override_config], @property_hash[:oldconfig]),
     })
   end
-  def do_destroy
-    api("repositories/#{@property_hash[:repo]}/importers/#{@property_hash[:importer]}/schedules/sync/#{@property_hash[:id]}", Net::HTTP::Delete)
+
+  def collection_url
+    "repositories/#{@property_hash[:repo]}/importers/#{@property_hash[:importer]}/schedules/sync"
+  end
+
+  def resource_url
+    "repositories/#{@property_hash[:repo]}/importers/#{@property_hash[:importer]}/schedules/sync/#{@property_hash[:id]}"
   end
 
   def self.rawinstances

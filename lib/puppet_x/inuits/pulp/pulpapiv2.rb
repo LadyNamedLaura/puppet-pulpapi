@@ -69,6 +69,10 @@ class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
     do_create
   end
 
+  def do_destroy
+    api(resource_url, Net::HTTP::Delete)
+  end
+
   def exists?
     !(@property_hash[:ensure] == :absent || @property_hash.empty?)
   end
