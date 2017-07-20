@@ -35,13 +35,9 @@ Puppet::Type.type(:pulp_permission).provide(:apiv2, :parent => PuppetX::Inuits::
 
   def self.rawinstances
     api('permissions').map do |perm|
-      if ['/v2/actions/login/','/v2/actions/logout/'].include? perm['resource']
-        []
-      else
+      unless ['/v2/actions/login/','/v2/actions/logout/'].include? perm['resource']
         perm['users'].map do |uname, operations|
-          if uname == PuppetX::Inuits::Pulp::PulpAPIv2.getapiconfig['apiuser']
-            []
-          else
+          if uname != ignored_user
             {
               :path          => perm['resource'],
               :user          => uname,
@@ -51,6 +47,10 @@ Puppet::Type.type(:pulp_permission).provide(:apiv2, :parent => PuppetX::Inuits::
           end
         end
       end
-    end
+    end.flatten.compact
+  end
+
+  def self.ignored_user
+    PuppetX::Inuits::Pulp::PulpAPIv2.getapiconfig['apiuser']
   end
 end
