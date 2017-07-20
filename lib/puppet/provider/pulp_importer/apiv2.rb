@@ -20,14 +20,14 @@ Puppet::Type.type(:pulp_importer).provide(:apiv2, :parent => PuppetX::Inuits::Pu
     }
   end
   def do_create
-    api("repositories/#{@property_hash[:repo]}/importers", Net::HTTP::Post, {
+    api(collection_url, Net::HTTP::Post, {
       :importer_type_id => @property_hash[:type],
       :importer_config  => @property_hash[:config],
     })
   end
   def do_update
     if @property_hash[:type] == @property_hash[:oldtype]
-      api("repositories/#{@property_hash[:repo]}/importers/#{@property_hash[:id]}", Net::HTTP::Put, {
+      api(resource_url, Net::HTTP::Put, {
         :importer_config => config_unset(@property_hash[:config], @property_hash[:oldconfig]),
       })
     else
@@ -35,8 +35,13 @@ Puppet::Type.type(:pulp_importer).provide(:apiv2, :parent => PuppetX::Inuits::Pu
       do_create
     end
   end
-  def do_destroy
-    api("repositories/#{@property_hash[:repo]}/importers/#{@property_hash[:id]}", Net::HTTP::Delete)
+
+  def collection_url
+    "repositories/#{@property_hash[:repo]}/importers"
+  end
+
+  def resource_url
+    "repositories/#{@property_hash[:repo]}/importers/#{@property_hash[:id]}"
   end
 
   def self.rawinstances
