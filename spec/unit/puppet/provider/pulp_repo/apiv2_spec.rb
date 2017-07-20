@@ -17,9 +17,9 @@ describe Puppet::Type.type(:pulp_repo).provider(:apiv2) do
 
   describe 'do_destroy' do
     it do
-      described_class.expects(:api).with('repositories/test', Net::HTTP::Delete, nil).returns(true)
-
-      expect(described_class.new(:name => 'test').do_destroy).to be true
+      instance = get_instance
+      instance.expects(:api).with('repositories/test', Net::HTTP::Delete).returns(true)
+      expect(instance.do_destroy).to be true
     end
   end
 
@@ -31,14 +31,9 @@ describe Puppet::Type.type(:pulp_repo).provider(:apiv2) do
         :description => 'description',
         :notes => {},
       }
-      described_class.expects(:api).with('repositories', Net::HTTP::Post, data).returns(true)
 
-      instance = described_class.new(
-        :name => 'test',
-        :display_name => 'display name',
-        :description => 'description',
-        :notes => {},
-      )
+      instance = get_instance
+      instance.expects(:api).with('repositories', Net::HTTP::Post, data).returns(true)
       expect(instance.do_create).to be true
     end
   end
@@ -52,14 +47,9 @@ describe Puppet::Type.type(:pulp_repo).provider(:apiv2) do
           :notes => {},
         },
       }
-      described_class.expects(:api).with('repositories/test', Net::HTTP::Put, data).returns(true)
 
-      instance = described_class.new(
-        :name => 'test',
-        :display_name => 'display name',
-        :description => 'description',
-        :notes => {},
-      )
+      instance = get_instance
+      instance.expects(:api).with('repositories/test', Net::HTTP::Put, data).returns(true)
       expect(instance.do_update).to be true
     end
   end
@@ -67,8 +57,21 @@ describe Puppet::Type.type(:pulp_repo).provider(:apiv2) do
   describe 'rawinstances' do
     it do
       described_class.expects(:api).with('repositories').returns([])
-
       expect(described_class.rawinstances).to eq []
     end
+  end
+
+  private
+
+  def get_instance(params={})
+    defaults = {
+      :name => 'test',
+      :display_name => 'display name',
+      :description => 'description',
+      :notes => {},
+    }
+    defaults.update(params)
+
+    described_class.new(defaults)
   end
 end
