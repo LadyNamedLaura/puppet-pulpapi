@@ -15,9 +15,13 @@ Puppet::Type.newtype(:pulp_user) do
   end
 
   newparam(:name) do
+    desc "The users' login"
     isnamevar
   end
+
   newproperty(:password) do
+    desc "The users' password"
+
     def insync?(is)
       begin
         config = PuppetX::Inuits::Pulp::PulpAPIv2.getapiconfig
