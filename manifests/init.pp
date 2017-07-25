@@ -33,7 +33,7 @@ class pulpapi(
 
   create_resources('::pulpapi::yum_repo', $yum_repos)
 
-  ::profile_pulp::yum_repo{'__empty__':
+  ::pulpapi::yum_repo{'__empty__':
     ensure       => present,
     relative_url => '.empty',
   }
