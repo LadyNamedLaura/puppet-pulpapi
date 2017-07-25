@@ -11,7 +11,7 @@ class pulpapi(
   $users             = {},
 ){
 
-  file {$::pulp_apiconfig_path:
+  file { "${::puppet_vardir}/pulpapi.json":
     ensure  => file,
     content => template('pulpapi/pulpapi.conf.erb'),
   }
