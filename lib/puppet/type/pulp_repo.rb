@@ -1,9 +1,11 @@
 begin
   require 'puppet_x/inuits/pulp/type'
+  require 'puppet_x/inuits/pulp/pulpapiv2'
 rescue LoadError
   require 'pathname'
   module_base = Pathname.new(__FILE__).dirname
   require module_base + '../../' + 'puppet_x/inuits/pulp/type'
+  require module_base + '../../' + 'puppet_x/inuits/pulp/pulpapiv2'
 end
 
 Puppet::Type.newtype(:pulp_repo) do
@@ -25,5 +27,8 @@ Puppet::Type.newtype(:pulp_repo) do
   end
 
   newproperty(:notes) do
+  end
+  autorequire(:file) do
+    [PuppetX::Inuits::Pulp::PulpAPIv2.configpath]
   end
 end
