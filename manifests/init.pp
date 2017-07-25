@@ -31,7 +31,7 @@ class pulpapi(
       purge => $purge_permissions,
   }
 
-  create_resources('::pulpapi::yum_repo', $yum_repos);
+  create_resources('::pulpapi::yum_repo', $yum_repos)
 
   ::profile_pulp::yum_repo{'__empty__':
     ensure       => present,
