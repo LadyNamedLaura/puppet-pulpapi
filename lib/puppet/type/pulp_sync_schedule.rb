@@ -1,9 +1,11 @@
 begin
   require 'puppet_x/inuits/pulp/type'
+  require 'puppet_x/inuits/pulp/pulpapiv2'
 rescue LoadError
   require 'pathname'
   module_base = Pathname.new(__FILE__).dirname
   require module_base + '../../' + 'puppet_x/inuits/pulp/type'
+  require module_base + '../../' + 'puppet_x/inuits/pulp/pulpapiv2'
 end
 
 Puppet::Type.newtype(:pulp_sync_schedule) do
@@ -34,6 +36,9 @@ Puppet::Type.newtype(:pulp_sync_schedule) do
   end
   def self.title_patterns
     PuppetX::Inuits::Pulp::Type.basic_split_title_patterns(:repo,:sched)
+  end
+  autorequire(:file) do
+    [PuppetX::Inuits::Pulp::PulpAPIv2.configpath]
   end
   autorequire(:pulp_repo) do
     [self[:repo]]

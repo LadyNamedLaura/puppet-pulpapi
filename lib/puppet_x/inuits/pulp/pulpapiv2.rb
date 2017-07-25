@@ -12,11 +12,14 @@ end
 class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
   @@apicache = {}
 
+  def self.configpath
+    File.join(Puppet.settings[:vardir], 'pulpapi.json')
+  end
+
   @@apiconfig = false
   def self.getapiconfig
     unless @@apiconfig
-      conffile = File.join(Puppet.settings[:vardir],"pulpapi.json")
-      @@apiconfig = JSON.parse(File.read(conffile))
+      @@apiconfig = JSON.parse(File.read(configpath))
     end
     @@apiconfig
   end
