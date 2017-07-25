@@ -3,7 +3,7 @@ class pulpapi(
   $apipass           = 'admin',
   $httpurl           = "http://${::fqdn}/pulp/repos/",
   $apiurl            = "https://${::fqdn}/pulp/api/v2/",
-  $purge_repos       = false, # set this to true in hiera, we don't want to nuke pulp if we lose hiera
+  $purge_repos       = false, # default to false to prevent accidental nuking without hiera
   $purge_permissions = true,
   $yum_repos         = {},
   $mirrors           = {}, # { relpath => source }
