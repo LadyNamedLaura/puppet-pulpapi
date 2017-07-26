@@ -37,7 +37,7 @@ Puppet::Type.type(:pulp_permission).provide(:apiv2, :parent => PuppetX::Inuits::
     api('permissions').map do |perm|
       unless ['/v2/actions/login/','/v2/actions/logout/'].include? perm['resource']
         perm['users'].map do |uname, operations|
-          if uname != ignored_user
+          if uname != ignored_user && perm['resource'] != "/v2/users/#{uname}/"
             {
               :path          => perm['resource'],
               :user          => uname,
