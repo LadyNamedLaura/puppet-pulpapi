@@ -33,6 +33,9 @@ class pulpapi(
 
   create_resources('::pulpapi::yum_repo', $yum_repos)
 
+  # this is a special always empty repo
+  # it exists to allow repositories without an upstream to use retain_old_count
+  # in order to only keep X number of versions.
   ::pulpapi::yum_repo{'__empty__':
     ensure       => present,
     relative_url => '.empty',
