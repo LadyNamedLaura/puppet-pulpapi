@@ -10,6 +10,19 @@ module PuppetX
   end
 end
 class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
+
+  # we want to always initialise property_hash
+  def initialize(resource = nil)
+    if resource.is_a?(Hash)
+      @property_hash = resource
+    elsif resource
+      @resource = resource
+      @property_hash = Hash[resource]
+    else
+      @property_hash = {}
+    end
+  end
+
   @@apicache = {}
 
   def self.configpath
@@ -95,7 +108,9 @@ class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
 
   def flush
     return if @property_hash.empty?
-    if @property_hash[:exists]
+    if @property_hash[:ensure] == :absent
+      do_destroy
+    elsif @property_hash[:exists]
       do_update
     else
       do_create
