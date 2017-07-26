@@ -7,6 +7,7 @@ rescue LoadError
   require module_base + '../../' + 'puppet_x/inuits/pulp/type'
   require module_base + '../../' + 'puppet_x/inuits/pulp/pulpapiv2'
 end
+require 'puppet/property/boolean'
 
 Puppet::Type.newtype(:pulp_sync_schedule) do
   ensurable do
