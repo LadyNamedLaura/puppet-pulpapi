@@ -9,27 +9,13 @@ rescue LoadError
 end
 
 Puppet::Type.newtype(:pulp_importer) do
-  ensurable do
-    newvalues :present, :absent
-    defaultto :present
-  end
+  ensurable
 
   newparam(:repo, :namevar => true) do
-  end
-  newparam(:name) do
-    def default
-      self.resource[:repo]
-    end
-    munge do |discard|
-      self.resource[:repo]
-    end
   end
   newproperty(:type) do
   end
   newproperty(:config) do
-  end
-  def self.title_patterns
-    PuppetX::Inuits::Pulp::Type.basic_split_title_patterns(:repo,:type)
   end
   autorequire(:file) do
     [PuppetX::Inuits::Pulp::PulpAPIv2.configpath]
