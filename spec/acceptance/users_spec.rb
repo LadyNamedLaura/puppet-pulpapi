@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'Basic usage' do
+describe 'User management' do
   include_examples 'the example', 'users.pp'
 
   let(:purge_repos) do

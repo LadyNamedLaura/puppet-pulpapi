@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'Basic usage' do
+describe 'Mirror definitions' do
   include_examples 'the example', 'mirrors.pp'
 
   let(:purge_repos) do
