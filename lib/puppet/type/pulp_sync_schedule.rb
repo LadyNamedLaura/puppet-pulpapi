@@ -26,7 +26,7 @@ Puppet::Type.newtype(:pulp_sync_schedule) do
       self.resource[:repo]
     end
     munge do |discard|
-      self.resource[:repo]
+      "#{self.resource[:repo]}::#{self.resource[:sched]}"
     end
   end
   newproperty(:enabled, :parent => Puppet::Property::Boolean) do
