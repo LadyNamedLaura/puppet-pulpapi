@@ -18,6 +18,7 @@ describe Puppet::Type.type(:pulp_sync_schedule).provider(:apiv2) do
   describe 'do_destroy' do
     it do
       instance = get_instance
+      instance.expects(:api).with('repositories/repo/importers').returns([{'id' => 1}])
       instance.expects(:api).with('repositories/repo/importers/1/schedules/sync/1', Net::HTTP::Delete).returns(true)
       expect(instance.do_destroy).to be true
     end

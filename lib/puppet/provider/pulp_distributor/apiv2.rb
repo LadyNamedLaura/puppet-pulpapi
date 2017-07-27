@@ -22,7 +22,7 @@ Puppet::Type.type(:pulp_distributor).provide(:apiv2, :parent => PuppetX::Inuits:
   end
   def do_create
     api(collection_url, Net::HTTP::Post, {
-      :distributor_id      => @resource[:name],
+      :distributor_id      => param(:name),
       :distributor_type_id => @property_hash[:type],
       :distributor_config  => @property_hash[:config],
       :auto_publish        => @property_hash[:auto_publish],
@@ -43,11 +43,11 @@ Puppet::Type.type(:pulp_distributor).provide(:apiv2, :parent => PuppetX::Inuits:
   end
 
   def collection_url
-    "repositories/#{@resource[:repo]}/distributors"
+    "repositories/#{param(:repo)}/distributors"
   end
 
   def resource_url
-    "repositories/#{@resource[:repo]}/distributors/#{@resource[:name]}"
+    "repositories/#{param(:repo)}/distributors/#{param(:name)}"
   end
 
   def self.rawinstances

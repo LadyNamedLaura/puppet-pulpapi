@@ -9,8 +9,10 @@ rescue LoadError
 end
 
 Puppet::Type.newtype(:pulp_repo) do
-  ensurable
-
+  ensurable do
+    newvalues :present, :absent
+    defaultto :present
+  end
   newparam(:name) do
     desc "Name of the repository"
   end

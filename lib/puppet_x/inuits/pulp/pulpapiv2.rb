@@ -84,6 +84,11 @@ class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
     end
   end
 
+  def param(name)
+    return @property_hash[name] if @property_hash.has_key?(name)
+    @resource[name] if @resource
+  end
+
   def flush
     return if @property_hash.empty?
     if @property_hash[:ensure] == :absent
