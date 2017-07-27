@@ -41,7 +41,7 @@ Puppet::Type.newtype(:pulp_permission) do
     PuppetX::Inuits::Pulp::Type.basic_split_title_patterns(:user,:path)
   end
   autorequire(:file) do
-    [PuppetX::Inuits::Pulp::PulpAPIv2.configpath]
+    [PuppetX::Inuits::Pulp::APIv2.config_filename]
   end
   autorequire(:pulp_user) do
     [self[:user]]

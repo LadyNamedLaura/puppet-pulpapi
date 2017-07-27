@@ -26,6 +26,6 @@ Puppet::Type.newtype(:pulp_repo) do
   newproperty(:notes) do
   end
   autorequire(:file) do
-    [PuppetX::Inuits::Pulp::PulpAPIv2.configpath]
+    [PuppetX::Inuits::Pulp::APIv2.config_filename]
   end
 end

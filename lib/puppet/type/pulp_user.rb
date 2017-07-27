@@ -34,4 +34,7 @@ Puppet::Type.newtype(:pulp_user) do
       end
     end
   end
+  autorequire(:file) do
+    [PuppetX::Inuits::Pulp::APIv2.config_filename]
+  end
 end

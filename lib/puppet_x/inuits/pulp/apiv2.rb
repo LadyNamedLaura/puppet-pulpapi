@@ -15,7 +15,7 @@ class PuppetX::Inuits::Pulp::APIv2
   def self.instance
     unless @@instance
       config = JSON.parse(File.read(config_filename))
-      @@instance = APIv2.initialize(config['apiurl'], config['apiuser'], config['apipass'], config['verify_ssl'])
+      @@instance = new(config['apiurl'], config['apiuser'], config['apipass'], config['verify_ssl'])
     end
 
     @@instance
@@ -31,6 +31,10 @@ class PuppetX::Inuits::Pulp::APIv2
     @username = username
     @password = password
     @verify_ssl = verify_ssl
+  end
+
+  def username
+    @username
   end
 
   def get_request(endpoint, method)

@@ -41,7 +41,7 @@ Puppet::Type.newtype(:pulp_distributor) do
     PuppetX::Inuits::Pulp::Type.basic_split_title_patterns(:repo,:id)
   end
   autorequire(:file) do
-    [PuppetX::Inuits::Pulp::PulpAPIv2.configpath]
+    [PuppetX::Inuits::Pulp::APIv2.config_filename]
   end
   autorequire(:pulp_repo) do
     [self[:repo]]
