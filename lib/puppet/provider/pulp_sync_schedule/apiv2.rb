@@ -21,7 +21,6 @@ Puppet::Type.type(:pulp_sync_schedule).provide(:apiv2, :parent => PuppetX::Inuit
     }
   end
   def do_create
-    @property_hash[:importer] = api("repositories/#{@property_hash[:repo]}/importers")[0]['id']
     api(collection_url, Net::HTTP::Post, {
       :schedule => @property_hash[:sched],
       :enabled  => @property_hash[:enabled],
@@ -30,10 +29,12 @@ Puppet::Type.type(:pulp_sync_schedule).provide(:apiv2, :parent => PuppetX::Inuit
   end
 
   def collection_url
+    @property_hash[:importer] = api("repositories/#{@property_hash[:repo]}/importers")[0]['id']
     "repositories/#{@property_hash[:repo]}/importers/#{@property_hash[:importer]}/schedules/sync"
   end
 
   def resource_url
+    @property_hash[:importer] = api("repositories/#{@property_hash[:repo]}/importers")[0]['id']
     "repositories/#{@property_hash[:repo]}/importers/#{@property_hash[:importer]}/schedules/sync/#{@property_hash[:id]}"
   end
 
