@@ -98,7 +98,7 @@ class PuppetX::Inuits::Pulp::PulpAPIv2 < Puppet::Provider
   @instancecache = false
   def self.instances
     unless @instancecache
-      @instancecache = self.rawinstances.map do |instance|
+      @instancecache = self.rawinstances.flatten.map do |instance|
         propertyhash = fieldmap.merge(fieldmap) do |k,v|
           if v.respond_to?('map')
             v.map { |e| instance[e] }.join('::')
