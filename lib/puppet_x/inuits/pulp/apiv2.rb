@@ -46,8 +46,11 @@ class PuppetX::Inuits::Pulp::APIv2
     request.basic_auth(@username, @password)
     request.body = JSON.generate(data) if data
     response = connection.request(request)
-
-    res = JSON.parse(response.body)
+    if response.body == "null"
+      res = nil
+    else
+      res = JSON.parse(response.body)
+    end
     raise(Puppet::Error, "#{response.to_s}\n#{JSON.pretty_generate(res)}") if response.code.to_i >= 400
     res
   end
