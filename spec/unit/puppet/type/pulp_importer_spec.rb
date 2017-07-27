@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Puppet::Type.type(:pulp_importer) do
   describe 'namevar' do
-    it 'has repo and name as its namevars' do
-      expect(described_class.key_attributes).to eq([:repo, :name])
+    it 'has repo as its namevar' do
+      expect(described_class.key_attributes).to eq([:repo])
     end
   end
 
